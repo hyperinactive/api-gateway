@@ -1,6 +1,9 @@
 package main
 
 import (
+	"microservice/config"
+	"microservice/router"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -11,6 +14,10 @@ import (
 )
 
 func main() {
+	if err := config.Init(); err != nil {
+		panic(err)
+	}
+
 	app := fiber.New()
 
 	// cors
@@ -26,11 +33,10 @@ func main() {
 	app.Use(cache.New())
 	app.Use(etag.New())
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Mars more, sikter")
-	})
-
 	app.Get("/metrics", monitor.New())
 
-	app.Listen("127.0.0.1:8080")
+	router.Init(app)
+
+	hostUrl := config.Config.Server.Host + ":" + config.Config.Server.Port
+	app.Listen(hostUrl)
 }

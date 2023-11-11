@@ -1,8 +1,12 @@
 module microservice
 
-go 1.21.1
+go 1.21.4
 
-require github.com/gofiber/fiber/v2 v2.50.0
+require (
+	github.com/gofiber/fiber/v2 v2.50.0
+	github.com/golang-jwt/jwt/v5 v5.1.0
+	github.com/joho/godotenv v1.5.1
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
