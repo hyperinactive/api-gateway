@@ -8,7 +8,7 @@ import (
 )
 
 // creates user claims and does user validation
-func createUserClaim(identity string, role string) (*UserClaims, error) {
+func createUserClaim(userId string, role string) (*UserClaims, error) {
 	// Validate role against allowed roles
 	validRoles := map[string]bool{
 		"admin": true,
@@ -20,8 +20,8 @@ func createUserClaim(identity string, role string) (*UserClaims, error) {
 	}
 
 	return &UserClaims{
-		Identity: identity,
-		Role:     role,
+		UserId: userId,
+		Role:   role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},

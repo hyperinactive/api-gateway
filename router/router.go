@@ -13,4 +13,5 @@ func Init(app *fiber.App) {
 
 	auth := app.Group("/auth")
 	auth.Post("/sign-in", handler.SignIn)
+	auth.Post("/sign-up", handler.SignUp)
 }

@@ -21,6 +21,7 @@ func Init() error {
 			Port:     os.Getenv("DB_PORT"),
 			User:     os.Getenv("DB_USER"),
 			Password: os.Getenv("DB_PASSWORD"),
+			Name:     os.Getenv("DB_NAME"),
 		},
 	}
 	return nil

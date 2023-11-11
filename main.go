@@ -2,6 +2,7 @@ package main
 
 import (
 	"microservice/config"
+	"microservice/db"
 	"microservice/router"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,10 @@ import (
 
 func main() {
 	if err := config.Init(); err != nil {
+		panic(err)
+	}
+
+	if err := db.Connect(); err != nil {
 		panic(err)
 	}
 

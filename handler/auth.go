@@ -3,26 +3,40 @@ package handler
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func SignIn(c *fiber.Ctx) error {
 	var input SignInBody
 
 	if err := c.BodyParser(&input); err != nil {
-		return c.SendStatus(fiber.StatusUnauthorized)
+		return c.SendStatus(fiber.StatusBadRequest)
 	}
 
-	identity := input.Identity
-	pass := input.Password
+	// read input
+	username := input.Username
+	password := input.Password
 
-	println(identity, pass)
+	// find user by username
+	// -----------------------------------------------------------------------------------------------------------
+	user, err := GetUserByUsername(username)
 
-	// TODO: bs
-	if identity != "user" || pass != "pass" {
-		return c.SendStatus(fiber.StatusUnauthorized)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"status": "error", "message": "Invalid Credentials", "error": ""})
 	}
 
-	claims, err := createUserClaim(identity, "user")
+	// compare password
+	// -----------------------------------------------------------------------------------------------------------
+	passValid := ComparePasswordHash(password, user.Password)
+
+	if !passValid {
+		return c.Status(400).JSON(fiber.Map{"status": "error", "message": "Invalid Credentials", "error": ""})
+	}
+
+	// generate token
+	// -----------------------------------------------------------------------------------------------------------
+	userId := user.ID.String()
+	claims, err := createUserClaim(userId, "user")
 
 	if err != nil {
 		return c.SendStatus(fiber.StatusBadRequest)
@@ -36,4 +50,30 @@ func SignIn(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"token": t})
+}
+
+func SignUp(c *fiber.Ctx) error {
+	var input SignUpBody
+
+	if err := c.BodyParser(&input); err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	err := CreateUser(input.Username, input.Email, input.Password)
+
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "errors": err.Error()})
+	}
+
+	return c.SendStatus(fiber.StatusOK)
+}
+
+func ComparePasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
 }

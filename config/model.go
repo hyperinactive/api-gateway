@@ -15,4 +15,5 @@ type Db struct {
 	Port     string
 	User     string
 	Password string
+	Name     string
 }
