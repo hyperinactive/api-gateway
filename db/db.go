@@ -3,9 +3,10 @@ package db
 import (
 	"errors"
 	"fmt"
-	"microservice/config"
-	"microservice/model"
 	"strconv"
+
+	"notgithub.com/hyperinactive/api-gateway/config"
+	"notgithub.com/hyperinactive/api-gateway/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

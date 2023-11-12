@@ -3,8 +3,9 @@ package handler
 import (
 	"errors"
 	"fmt"
-	"microservice/db"
-	"microservice/model"
+
+	"notgithub.com/hyperinactive/api-gateway/db"
+	"notgithub.com/hyperinactive/api-gateway/model"
 )
 
 func GetUserById(id uint64) (*model.User, error) {

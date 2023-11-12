@@ -1,16 +1,15 @@
 package main
 
 import (
-	"microservice/config"
-	"microservice/db"
-	"microservice/router"
+	"notgithub.com/hyperinactive/api-gateway/config"
+	"notgithub.com/hyperinactive/api-gateway/db"
+	"notgithub.com/hyperinactive/api-gateway/router"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
@@ -37,8 +36,6 @@ func main() {
 	// caching
 	app.Use(cache.New())
 	app.Use(etag.New())
-
-	app.Get("/metrics", monitor.New())
 
 	router.Init(app)
 

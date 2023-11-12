@@ -1,9 +1,10 @@
 package router
 
 import (
-	"microservice/handler"
+	"notgithub.com/hyperinactive/api-gateway/handler"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 )
 
 func Init(app *fiber.App) {
@@ -14,4 +15,6 @@ func Init(app *fiber.App) {
 	auth := app.Group("/auth")
 	auth.Post("/sign-in", handler.SignIn)
 	auth.Post("/sign-up", handler.SignUp)
+
+	app.Get("/metrics", monitor.New())
 }

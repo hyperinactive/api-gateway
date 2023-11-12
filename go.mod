@@ -1,4 +1,4 @@
-module microservice
+module notgithub.com/hyperinactive/api-gateway
 
 go 1.21.4
 
