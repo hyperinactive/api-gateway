@@ -3,6 +3,7 @@ version: "3"
 services:
   postgres:
     image: postgres
+    container_name: 'db'
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
@@ -14,6 +15,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: 'db-client'
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
       PGADMIN_DEFAULT_PASSWORD: password
@@ -24,6 +26,16 @@ services:
       - pgadmin:/var/lib/pgadmin
     depends_on:
       - postgres
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'message-broker'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
 
 volumes:
   postgres:

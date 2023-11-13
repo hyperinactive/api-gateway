@@ -1,7 +1,7 @@
-To spin up a dev database:
+To spin up a dev database, client and message broker:
 
 ```
-docker compose -f docker.compose.postgres.yml up -d
+docker compose -f docker.compose.yaml up -d
 ```
 
 To connect to the database via pgadmin

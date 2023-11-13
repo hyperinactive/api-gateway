@@ -6,11 +6,6 @@ import (
 	"notgithub.com/hyperinactive/api-gateway/router"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cache"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/etag"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 func main() {
@@ -24,20 +19,8 @@ func main() {
 
 	app := fiber.New()
 
-	// cors
-	app.Use(cors.New())
-
-	// log
-	app.Use(logger.New())
-
-	// recover on panic
-	app.Use(recover.New())
-
-	// caching
-	app.Use(cache.New())
-	app.Use(etag.New())
-
-	router.Init(app)
+	router.InitMiddleware(app)
+	router.InitRoutes(app)
 
 	hostUrl := config.Config.Server.Host + ":" + config.Config.Server.Port
 	app.Listen(hostUrl)
